@@ -195,7 +195,7 @@ def translate(src_lang, tgt_lang, list_text):
     #f.close()
     
     if(len_of_batch > 0):
-        textarea.send_keys(text)
+        textarea.send_keys(text_to_translate)
         list_transed_text = getTranslateContent(driver, list_tgt)
         
     if(len(list_transed_text) > 0):
