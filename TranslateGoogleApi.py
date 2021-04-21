@@ -11,6 +11,7 @@ import argparse
 import time
 import urllib
 import re
+import ChromeDriver
 
 
 def compareTitle(src_title, tgt_title):
@@ -97,7 +98,7 @@ def translate(src_lang, tgt_lang, list_text):
     
     #driver = webdriver.PhantomJS(os.path.abspath(os.getcwd()+"\phantomjs"))
     #driver = webdriver.Opera(executable_path=os.path.abspath(os.getcwd()+"/operadriver.exe"), options = options)
-    driver = webdriver.Chrome(executable_path=os.path.abspath(os.getcwd()+"/chromedriver.exe"))
+    driver = ChromeDriver.getChromeDriver()
     
     url = "https://translate.google.com/?sl={}&tl={}&text={}&op=translate".format(src_lang, tgt_lang, "")
     driver.get(url)
@@ -118,7 +119,7 @@ def translate(src_lang, tgt_lang, list_text):
             
             if(loop % 100 == 0):
                 driver.close()
-                driver = webdriver.Chrome(executable_path=os.path.abspath(os.getcwd()+"/chromedriver.exe"))
+                driver = ChromeDriver.getChromeDriver()
                 url = "https://translate.google.com/?sl={}&tl={}&text={}&op=translate".format(src_lang, tgt_lang, "")
                 driver.get(url)
                 textarea = driver.find_element_by_tag_name("textarea")
