@@ -260,7 +260,34 @@ def getSentenceInFile(map_):
     for file in list_dir:
         if(file.find(".") == -1):
             getSentenceInFile(map_ , list_dir, current_dir+"/{}".format(file))
+
+def Validate(dict_lang, dic_list):
+    list_ = list()
+    for key in dict_lang:
+    
+        if(key == "" or key == " "):
+            continue
             
+        # các từ không đúng với định dạng
+        if not re.search("[A-z0-9]+", key):
+            isVi = False
+            # kiểm tra trong từ điển xem có từ này không
+            for src_text in dic_list:
+                if( src_text == key):
+                    isVi = True
+                    break
+                    
+            if not isVi:
+                keepSentence = False
+                
+                list_.append(key)
+                
+                
+                break
+                
+    for key in  list_:           
+        dict_lang.pop(key, None)
+        
 def parse_arguments(argv):
 
     parser = argparse.ArgumentParser()  
@@ -299,6 +326,21 @@ if __name__ == '__main__':
             f.close()
             
     if(parser.case == 2):
+    
+        dirc_file_name = "vi.dir.txt"
+        dic_list = dict()
+        if os.path.isfile(dirc_file_name):
+            f = open (dirc_file_name, "r", encoding ="utf-8")
+            for line in f:
+                line = line.replace("\n","")
+                if not line in dic_list:
+                    dic_list[line] = 1
+            f.close()
+
+            if not dic_list:
+                print("Missing vietnames dictionary file")
+                quit()
+    
         file_name = parser.file_name
         translate_file_name = parser.save_file_name
         
@@ -351,5 +393,24 @@ if __name__ == '__main__':
             
             
             
-            translate(src_lang, tgt_lang, list_tgt, list_need_trans_text)    
+            translate(src_lang, tgt_lang, list_tgt, list_need_trans_text)
+
+            if(tgt_lang == "vi"):
+                dict_lang = dict()
+                
+                f = open(translate_file_name,"r",encoding="UTF-8")
+                
+                for line in f:
+                    line = line.replace("\n", "")
+                    line = line.split("\t")
+                    dict_lang[line[0]] = line[1]
+                f.close()
+                
+                Validate(dict_lang, dic_list)
+                
+                f = open(translate_file_name,"w",encoding="UTF-8")
+                
+                for key in dict_lang:
+                    f.write("{}\t{}\n".format(key, dict_lang[key]))
+                f.close()
         

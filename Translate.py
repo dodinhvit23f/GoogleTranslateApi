@@ -167,7 +167,7 @@ if __name__ == '__main__':
     
     Validate(dict_, dic_list)
     
-    pdb.set_trace()
+   
     
     f = open("vi-lo1.txt", "w", encoding="utf-8")
     for key in dict_:
