@@ -12,7 +12,8 @@ import time
 import urllib
 import re
 import ChromeDriver
-
+from selenium.webdriver import Chrome
+from selenium import webdriver
 
 def compareTitle(src_title, tgt_title):
 
@@ -202,7 +203,98 @@ def translate(src_lang, tgt_lang, list_text):
     if(len(list_transed_text) > 0):
                 saveFile(translate_file_name,list_transed_text)        
     driver.close()
-    
+
+
+
+def translateFileToFileApi(driver, list_text, file_name):
+    global translate_file_name
+
+    list_tgt = list()
+    loop = 1
+
+    textarea = driver.find_element_by_tag_name("textarea")
+
+    print(len(list_text))
+
+    len_of_batch = 0
+    lim_of_batch = 3800
+    text_to_translate = ""
+
+    list_transed_text = list()
+
+    try:
+        for text in list_text:
+
+            if (len_of_batch > lim_of_batch):
+
+                last_index = len(text_to_translate) - 1
+                if (text_to_translate[last_index] == "\n"):
+                    text_to_translate = text_to_translate[0:last_index - 1]
+                textarea.send_keys(text_to_translate)
+
+                list_transed_text = getTranslateContent(driver, list_tgt)
+
+                textarea.clear()
+                len_of_batch = 0
+                list_tgt = list()
+                text_to_translate = ""
+                loop = loop + 1
+                time.sleep(0.5)
+
+
+
+            else:
+                text_len = len(text)
+
+                if (text_len + len_of_batch > 4000):
+
+                    last_index = len(text_to_translate) - 1
+                    if (text_to_translate[last_index] == "\n"):
+                        text_to_translate = text_to_translate[0:last_index - 1]
+
+                    textarea.send_keys(text_to_translate)
+
+                    list_transed_text = getTranslateContent(driver, list_tgt)
+
+                    textarea.clear()
+                    len_of_batch = 0
+                    list_tgt = list()
+                    loop = loop + 1
+                    text_to_translate = ""
+                    time.sleep(0.5)
+
+                len_of_batch = len_of_batch + text_len
+
+            text = bytes(text, "utf-8").decode('utf-8', 'ignore')
+            text = text.replace("\r", "")
+            not_bmp = x = re.search(u'[\U00010000-\U0010ffff]', text)
+
+            if not_bmp:
+                continue
+
+            text_to_translate = text_to_translate + text + " \n"
+            list_tgt.append(text)
+
+            if list_transed_text:
+                saveFile(file_name, list_transed_text)
+                list_transed_text = list()
+
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
+        time.sleep(3)
+        # pdb.set_trace()
+        pass
+        # f.close()
+
+    if (len_of_batch > 0):
+        textarea.send_keys(text_to_translate)
+        list_transed_text = getTranslateContent(driver, list_tgt)
+
+    if (len(list_transed_text) > 0):
+        saveFile(file_name, list_transed_text)
+
+
 @dispatch(str,str,list,list)    
 def translate(src_lang, tgt_lang, list_text,list_compare):
 
