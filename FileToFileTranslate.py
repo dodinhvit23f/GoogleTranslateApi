@@ -59,8 +59,11 @@ if __name__ == '__main__':
 
                 list_text.append(line)
             f.close()
-           
-            TranslateGoogleApi.translateFileToFileApi(driver=driver,  list_text=list_text, file_name=save_path+file)
+            
+            try:
+                TranslateGoogleApi.translateFileToFileApi(driver=driver,  list_text=list_text, file_name=save_path+file)
+            except:
+                pass
             print(save_path+file)
             time.sleep(1)
             #pdb.set_trace()

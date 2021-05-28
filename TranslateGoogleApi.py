@@ -200,8 +200,9 @@ def translate(src_lang, tgt_lang, list_text):
         textarea.send_keys(text_to_translate)
         list_transed_text = getTranslateContent(driver, list_tgt)
         
-    if(len(list_transed_text) > 0):
-                saveFile(translate_file_name,list_transed_text)        
+    if  list_transed_text :
+        if(len(list_transed_text) > 0):
+            saveFile(translate_file_name,list_transed_text)        
     driver.close()
 
 
