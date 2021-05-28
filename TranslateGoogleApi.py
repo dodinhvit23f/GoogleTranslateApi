@@ -139,7 +139,7 @@ def translate(src_lang, tgt_lang, list_text):
                 
                 textarea.clear()
                 len_of_batch = 0
-                list_tgt = list()
+                
                 text_to_translate = ""
                 loop = loop + 1
                 time.sleep(0.5)
@@ -210,7 +210,7 @@ def translate(src_lang, tgt_lang, list_text):
 def translateFileToFileApi(driver, list_text, file_name):
     global translate_file_name
 
-    list_tgt = list()
+    
     loop = 1
 
     textarea = driver.find_element_by_tag_name("textarea")
@@ -220,7 +220,8 @@ def translateFileToFileApi(driver, list_text, file_name):
     len_of_batch = 0
     lim_of_batch = 3800
     text_to_translate = ""
-
+    
+    list_tgt = list()
     list_transed_text = list()
 
     try:
@@ -291,9 +292,10 @@ def translateFileToFileApi(driver, list_text, file_name):
     if (len_of_batch > 0):
         textarea.send_keys(text_to_translate)
         list_transed_text = getTranslateContent(driver, list_tgt)
-
-    if (len(list_transed_text) > 0):
-        saveFile(file_name, list_transed_text)
+        
+    if list_transed_text:
+        if (len(list_transed_text) > 0):
+            saveFile(file_name, list_transed_text)
 
 
 @dispatch(str,str,list,list)    
