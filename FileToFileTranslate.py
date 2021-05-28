@@ -36,7 +36,8 @@ if __name__ == '__main__':
     list_file = os.listdir(translate_path)
     loop = 0
     for file in list_file:
-        if(loop == 1000):
+        if(loop == 100):
+            driver.delete_all_cookies()
             driver.close()
             driver = ChromeDriver.getChromeDriver()
             url = "https://translate.google.com/?sl={}&tl={}&text={}&op=translate".format(src_lang, tgt_lang, "")
