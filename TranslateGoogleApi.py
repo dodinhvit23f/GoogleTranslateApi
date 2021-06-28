@@ -99,7 +99,7 @@ def translate(src_lang, tgt_lang, list_text):
     
     #driver = webdriver.PhantomJS(os.path.abspath(os.getcwd()+"\phantomjs"))
     #driver = webdriver.Opera(executable_path=os.path.abspath(os.getcwd()+"/operadriver.exe"), options = options)
-    driver = ChromeDriver.getChromeDriver()
+    driver = ChromeDriver.getChromeDriver(IsUbuntu)
     
     url = "https://translate.google.com/?sl={}&tl={}&text={}&op=translate".format(src_lang, tgt_lang, "")
     driver.get(url)
@@ -120,7 +120,7 @@ def translate(src_lang, tgt_lang, list_text):
             
             if(loop % 100 == 0):
                 driver.close()
-                driver = ChromeDriver.getChromeDriver()
+                driver = ChromeDriver.getChromeDriver(IsUbuntu)
                 url = "https://translate.google.com/?sl={}&tl={}&text={}&op=translate".format(src_lang, tgt_lang, "")
                 driver.get(url)
                 textarea = driver.find_element_by_tag_name("textarea")
@@ -323,10 +323,7 @@ def translateFileToFileApi(driver, list_text, file_name):
     if list_transed_text:
         if (len(list_transed_text) > 0):
             saveFile(file_name, list_transed_text)
-
-
-
-    
+   
 @dispatch(dict, list, str)    
 def getSentenceInFile(map_ , list_dir, current_dir):
     global tgt_lang
@@ -395,6 +392,7 @@ def parse_arguments(argv):
     parser.add_argument('--tgt_lang', type=str, help='Target Language.',default="km")
     parser.add_argument('--src_lang', type=str, help='Source Language.',default="vi")
     parser.add_argument('--case', type=int, help='1 to crawl , 2 to translate',default=2)
+    parser.add_argument('--IsUbuntu', type=bool, help='1 to crawl , 2 to translate',default=False)
     return parser.parse_args(argv)
 
 # python TranslateGoogleApi.py --tgt_lang "zh" --case 2 --file_name "Translate-zh.txt" --save_file_name "vi-zh.txt"
@@ -402,13 +400,15 @@ def parse_arguments(argv):
 # python TranslateGoogleApi.py --tgt_lang "lo" --case 2 --file_name "Translate-lo.txt" --save_file_name "vi-lo.txt"
 # python TranslateGoogleApi.py  --src_lang "vi" --tgt_lang "km" --case 2 --file_name "test.txt" --save_file_name "km-vi.txt"
 # python TranslateGoogleApi.py  --src_lang "vi" --tgt_lang "zh-CN" --case 2 --file_name "test.txt" --save_file_name "zh-vi.txt"
-# python TranslateGoogleApi.py  --src_lang "vi" --tgt_lang "lo" --case 2 --file_name "test.txt" --save_file_name "lo-vi.txt"
+# python TranslateGoogleApi.py  --src_lang "vi" --tgt_lang "lo" --case 2 --file_name "test.txt" --save_file_name "lo-vi.txt" 
+
 if __name__ == '__main__':
     
     parser = parse_arguments(sys.argv[1:])
     
     tgt_lang = parser.tgt_lang
     src_lang = parser.src_lang
+    IsUbuntu = parser.IsUbuntu
     
     if(parser.case == 1):
         file_name = parser.file_name

@@ -26,7 +26,9 @@ def getChromeDriver():
     options.add_argument('--disable-blink-features=AutomationControlled')
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
-
-    driver = webdriver.Chrome(os.path.abspath(os.getcwd()+"\chromedriver.exe"),options= options)
+    pdb.set_trace()
+    
+    driver = webdriver.Chrome(os.path.abspath(os.getcwd()+"/chromedriver"),options= options)
+   
     #pdb.set_trace()
     return driver
