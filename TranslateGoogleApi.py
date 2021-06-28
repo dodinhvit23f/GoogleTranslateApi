@@ -61,7 +61,7 @@ def getTranslateContent(driver, list_tgt):
                 list_.remove("")
             if(x == " "):
                 list_.remove(" ")
-        
+        pdb.set_trace()
         if (len(list_tgt) != len(list_)):
             return list()
             
@@ -138,6 +138,8 @@ def translate(src_lang, tgt_lang, list_text):
                 list_transed_text = getTranslateContent(driver, list_tgt)
                 
                 textarea.clear()
+                list_tgt = list()
+                
                 len_of_batch = 0
                 
                 text_to_translate = ""
@@ -205,6 +207,31 @@ def translate(src_lang, tgt_lang, list_text):
             saveFile(translate_file_name,list_transed_text)        
     driver.close()
 
+@dispatch(str,str,list,list)    
+def translate(src_lang, tgt_lang, list_text,list_compare):
+
+    global translate_file_name
+    
+   
+    if not list_compare:
+        return
+        
+    print(len(list_text))
+    
+    list_text = sorted(list_text, key=len) 
+    
+    index = 1
+    for translated in list_compare:
+        try:
+            list_text.remove(translated)
+            index = index + 1
+        except:
+            pass
+        print("loai cau: {}".format(translated))
+        
+    
+       
+    translate(src_lang, tgt_lang, list_text)
 
 
 def translateFileToFileApi(driver, list_text, file_name):
@@ -298,29 +325,6 @@ def translateFileToFileApi(driver, list_text, file_name):
             saveFile(file_name, list_transed_text)
 
 
-@dispatch(str,str,list,list)    
-def translate(src_lang, tgt_lang, list_text,list_compare):
-
-    global translate_file_name
-    
-   
-    if not list_compare:
-        return
-        
-    print(len(list_text))
-    
-    index = 1
-    for translated in list_compare:
-        try:
-            list_text.remove(translated)
-            index = index + 1
-        except:
-            pdb.set_trace()
-        print("loai cau: {}".format(translated))
-        
-    
-    list_text = sorted(list_text, key=len)    
-    translate(src_lang, tgt_lang, list_text)
 
     
 @dispatch(dict, list, str)    
@@ -475,7 +479,8 @@ if __name__ == '__main__':
             f = open(translate_file_name,"r",encoding="utf-8")
             
             for text in f:
-                text = text.replace("\n","").strip()
+                text = text.replace("\n","")
+                text = text.replace("\r","").strip()
                 text = text.split("\t")
                 
                 if(len(text) == 1):

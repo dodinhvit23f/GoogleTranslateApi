@@ -66,7 +66,7 @@ if __name__ == '__main__':
             except:
                 pass
             print(save_path+file)
-            time.sleep(1)
+            
             #pdb.set_trace()
             url = "https://translate.google.com/?sl={}&tl={}&text={}&op=translate".format(src_lang, tgt_lang, "")
             driver.get(url)
