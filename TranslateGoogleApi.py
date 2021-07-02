@@ -61,7 +61,7 @@ def getTranslateContent(driver, list_tgt):
                 list_.remove("")
             if(x == " "):
                 list_.remove(" ")
-        pdb.set_trace()
+        #pdb.set_trace()
         if (len(list_tgt) != len(list_)):
             return list()
             
@@ -99,7 +99,7 @@ def translate(src_lang, tgt_lang, list_text):
     
     #driver = webdriver.PhantomJS(os.path.abspath(os.getcwd()+"\phantomjs"))
     #driver = webdriver.Opera(executable_path=os.path.abspath(os.getcwd()+"/operadriver.exe"), options = options)
-    driver = ChromeDriver.getChromeDriver(IsUbuntu)
+    driver = ChromeDriver.getChromeDriver()
     
     url = "https://translate.google.com/?sl={}&tl={}&text={}&op=translate".format(src_lang, tgt_lang, "")
     driver.get(url)
@@ -120,7 +120,7 @@ def translate(src_lang, tgt_lang, list_text):
             
             if(loop % 100 == 0):
                 driver.close()
-                driver = ChromeDriver.getChromeDriver(IsUbuntu)
+                driver = ChromeDriver.getChromeDriver()
                 url = "https://translate.google.com/?sl={}&tl={}&text={}&op=translate".format(src_lang, tgt_lang, "")
                 driver.get(url)
                 textarea = driver.find_element_by_tag_name("textarea")
@@ -145,9 +145,7 @@ def translate(src_lang, tgt_lang, list_text):
                 text_to_translate = ""
                 loop = loop + 1
                 time.sleep(0.5)
-                
-                url = "https://translate.google.com/?sl={}&tl={}&text={}&op=translate".format(src_lang, tgt_lang, "")
-                driver.get(url)
+
                 
             else:
                 text_len =  len(text)
@@ -168,11 +166,7 @@ def translate(src_lang, tgt_lang, list_text):
                     loop = loop + 1
                     text_to_translate = ""
                     time.sleep(0.5)
-                    
-                    url = "https://translate.google.com/?sl={}&tl={}&text={}&op=translate".format(src_lang, tgt_lang, "")
-                    driver.get(url)
-                    
-                    
+    
                 len_of_batch = len_of_batch + text_len
             
             text = bytes(text,"utf-8").decode('utf-8', 'ignore')
@@ -312,7 +306,7 @@ def translateFileToFileApi(driver, list_text, file_name):
         print(e)
         traceback.print_exc()
         time.sleep(3)
-        # pdb.set_trace()
+       
         pass
         # f.close()
 
